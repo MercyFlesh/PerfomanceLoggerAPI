@@ -17,7 +17,7 @@ namespace PerfomanceLogger.Api.Controllers
         [Route("[action]")]
         public IActionResult UploadData(IFormFile file)
         {
-            return Ok();
+            return Ok();    
         }
 
         [HttpGet]
