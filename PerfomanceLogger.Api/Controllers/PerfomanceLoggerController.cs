@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PerfomanceLogger.Api.ServiceInterfaces;
 
 namespace PerfomanceLogger.Api.Controllers
 {
@@ -15,9 +16,18 @@ namespace PerfomanceLogger.Api.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public IActionResult UploadData(IFormFile file)
+        public IActionResult UploadData(IFormFile file, [FromServices]IDocumentService documentService)
         {
-            return Ok();    
+            try
+            {
+                Console.WriteLine(file.Length);
+                documentService.UploadCsv(file);
+                return Ok();  
+            }
+            catch(Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
 
         [HttpGet]

@@ -1,4 +1,7 @@
+using PerfomanceLogger.Api.Services;
+using PerfomanceLogger.Domain.Interfaces;
 using PerfomanceLogger.Infrastructure.Context;
+using PerfomanceLogger.Infrastructure.Repositories;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +12,10 @@ builder.Services.AddPerfomanceLoggerContext(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IDocumentService, DocumentService>();
+
+builder.Services.AddScoped<IValueRepository, ValueRepository>();
+builder.Services.AddScoped<IResultRepository, ResultRepository>();
 
 var app = builder.Build();
 

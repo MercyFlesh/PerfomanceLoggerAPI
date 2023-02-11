@@ -10,11 +10,11 @@ namespace PerfomanceLogger.Domain.Models
     {
         public int Id { get; set; }
 
-        public string FileName { get; init; } = null!;
+        public string FileName { get; set; } = null!;
 
-        public DateTime Date { get; init; }
+        public DateTime Date { get; set; }
 
-        public uint Time { get; set; }
+        public int Time { get; set; }
 
         public double Mark { get; set; }
     }
