@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PerfomanceLogger.Domain.Interfaces
 {
-    public interface IResultRepository
+    public interface IPerfomanceRepository
     {
     }
 }

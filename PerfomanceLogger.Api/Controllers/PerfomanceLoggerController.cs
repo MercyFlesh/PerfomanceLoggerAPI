@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PerfomanceLogger.Api.ServiceInterfaces;
+using PerfomanceLogger.Domain.Interfaces;
 
 namespace PerfomanceLogger.Api.Controllers
 {
@@ -18,10 +18,16 @@ namespace PerfomanceLogger.Api.Controllers
         [Route("[action]")]
         public IActionResult UploadData(IFormFile file, [FromServices]IDocumentService documentService)
         {
+            if (file.Length == 0)
+                return BadRequest("Received empty file");
+
+            string format = file.FileName.Split('.')[1];
+            if (format != "csv")
+                return BadRequest("Incorrect file format");
+
             try
             {
-                Console.WriteLine(file.Length);
-                documentService.UploadCsv(file);
+                documentService.UploadCsv(file.OpenReadStream(), file.FileName.Split('.')[0]);
                 return Ok();  
             }
             catch(Exception ex)

@@ -15,51 +15,38 @@ namespace PerfomanceLogger.Api.Services
 
         public async void UploadCsv(Stream stream, string fileName)
         {
+            var result = new Result();
             var records = new List<Value>();
             using (var streamReader = new StreamReader(stream))
             {
                 string? row;
                 for (int i = 0; (row = await streamReader.ReadLineAsync()) != null; i++)
                 {
-                    var valData = ValidateData(row);
-                    valData.FileName = fileName;
-                    valData.Id = i;
-                    records.Add(valData);
+                    var record = ValidateData(row);
+                    record.Result = result;
+                    records.Add(record);
                 }
             }
 
             int countRecords = records.Count;
             if (countRecords > 1 && countRecords < 10000)
             {
-                var minTime = records.MinBy(x => x.Date)!.Date;
+                result.FileName = fileName;
+                result.CountRows = countRecords;
+                result.MinTime = records.MinBy(x => x.Date)!.Date;
                 var maxTime = records.MaxBy(x => x.Date)!.Date;
-                TimeSpan totalTime = maxTime - minTime;
-                double meanTime = records.Average(x => x.Time);
-                double meanMark = records.Average(x => x.Mark);
+                result.TotalTime = maxTime - result.MinTime;
+                result.MeanExecutionTime = records.Average(x => x.Time);
+                result.MeanMark = records.Average(x => x.Mark);
                 
                 var recordsOrderedByMark = records.OrderBy(x => x);
-                double medianMark;
                 if (countRecords % 2 == 0)
-                    medianMark = recordsOrderedByMark.Skip((countRecords / 2) - 1).Take(2).Average(x => x.Mark);
+                    result.MedianMark = recordsOrderedByMark.Skip((countRecords / 2) - 1).Take(2).Average(x => x.Mark);
                 else
-                    medianMark = recordsOrderedByMark.ElementAt(countRecords / 2).Mark;
+                    result.MedianMark = recordsOrderedByMark.ElementAt(countRecords / 2).Mark;
 
-                var minMark = recordsOrderedByMark.ElementAt(0).Mark;
-                var maxMark = recordsOrderedByMark.ElementAt(countRecords - 1).Mark;
-
-                var result = new Result
-                {
-                    FileName = fileName,
-                    TotalTime = totalTime,
-                    MinTime = minTime,
-                    MeanExecutionTime = meanTime,
-                    MeanMark = meanMark,
-                    MeadianMark = medianMark,
-                    MinMark = minMark,
-                    MaxMark = maxMark,
-                    CountRows = countRecords
-                };
-
+                result.MinMark = recordsOrderedByMark.ElementAt(0).Mark;
+                result.MaxMark = recordsOrderedByMark.ElementAt(countRecords - 1).Mark;
             }
             else
             {

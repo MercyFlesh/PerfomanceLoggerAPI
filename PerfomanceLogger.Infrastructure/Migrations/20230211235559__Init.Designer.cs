@@ -12,7 +12,7 @@ using PerfomanceLogger.Infrastructure.Context;
 namespace PerfomanceLogger.Infrastructure.Migrations
 {
     [DbContext(typeof(PerfomanceLoggerDbContext))]
-    [Migration("20230206221131__Init")]
+    [Migration("20230211235559__Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -36,13 +36,13 @@ namespace PerfomanceLogger.Infrastructure.Migrations
                     b.Property<double>("MaxMark")
                         .HasColumnType("float");
 
-                    b.Property<double>("MeadianMark")
-                        .HasColumnType("float");
-
                     b.Property<double>("MeanExecutionTime")
                         .HasColumnType("float");
 
                     b.Property<double>("MeanMark")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MedianMark")
                         .HasColumnType("float");
 
                     b.Property<double>("MinMark")
@@ -51,8 +51,8 @@ namespace PerfomanceLogger.Infrastructure.Migrations
                     b.Property<DateTime>("MinTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("TotalTime")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("TotalTime")
+                        .HasColumnType("time");
 
                     b.HasKey("FileName");
 
@@ -70,19 +70,34 @@ namespace PerfomanceLogger.Infrastructure.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<double>("Mark")
                         .HasColumnType("float");
 
-                    b.Property<long>("Time")
-                        .HasColumnType("bigint");
+                    b.Property<string>("ResultFileName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Time")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ResultFileName");
+
                     b.ToTable("Values");
+                });
+
+            modelBuilder.Entity("PerfomanceLogger.Domain.Models.Value", b =>
+                {
+                    b.HasOne("PerfomanceLogger.Domain.Models.Result", "Result")
+                        .WithMany("Values")
+                        .HasForeignKey("ResultFileName");
+
+                    b.Navigation("Result");
+                });
+
+            modelBuilder.Entity("PerfomanceLogger.Domain.Models.Result", b =>
+                {
+                    b.Navigation("Values");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,8 +14,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 
-builder.Services.AddScoped<IValueRepository, ValueRepository>();
-builder.Services.AddScoped<IResultRepository, ResultRepository>();
+builder.Services.AddScoped<IPerfomanceRepository, PerfomanceRepository>();
 
 var app = builder.Build();
 

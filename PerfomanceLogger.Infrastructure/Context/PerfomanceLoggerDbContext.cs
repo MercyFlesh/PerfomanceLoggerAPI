@@ -21,8 +21,10 @@ namespace PerfomanceLogger.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Value>().HasKey(c => new { c.Id, c.FileName });
+            builder.Entity<Value>().HasKey(c => new { c.Id });
             builder.Entity<Result>().HasKey(c => new { c.FileName });
+
+            builder.Entity<Result>().HasMany(c => c.Values).WithOne(e => e.Result);
         }
     }
 }
