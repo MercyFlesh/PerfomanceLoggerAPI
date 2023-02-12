@@ -51,7 +51,7 @@ namespace PerfomanceLogger.Api.Services
                 result.MinMark = recordsOrderedByMark.ElementAt(0).Mark;
                 result.MaxMark = recordsOrderedByMark.ElementAt(countRecords - 1).Mark;
 
-                await _perfomanceRepository.AddOrUpdateData(records, result);
+                await _perfomanceRepository.AddOrUpdateDataAsync(records, result);
             }
             else
             {

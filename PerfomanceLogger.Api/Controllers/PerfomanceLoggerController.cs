@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PerfomanceLogger.Domain.Models;
 using PerfomanceLogger.Domain.Interfaces;
 
 namespace PerfomanceLogger.Api.Controllers
@@ -7,10 +8,14 @@ namespace PerfomanceLogger.Api.Controllers
     [Route("api/[controller]")]
     public class PerfomanceLoggerController : ControllerBase
     {
+        private readonly IPerfomanceRepository _perfomanceRepository;
         private readonly ILogger<PerfomanceLoggerController> _logger;
 
-        public PerfomanceLoggerController(ILogger<PerfomanceLoggerController> logger)
+        public PerfomanceLoggerController(
+            IPerfomanceRepository perfomanceRepository,
+            ILogger<PerfomanceLoggerController> logger)
         {
+            _perfomanceRepository = perfomanceRepository;
             _logger = logger;
         }
 
@@ -38,14 +43,15 @@ namespace PerfomanceLogger.Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public IActionResult GetFilteredData()
+        public IActionResult GetFilteredData([FromQuery]FilterQuery filter)
         {
+            Console.WriteLine(filter.FileName == null);
             return Ok();
         }
 
         [HttpGet]
         [Route("[action]")]
-        public IActionResult GetFileValues()
+        public IActionResult GetFileValues(string fileName)
         {
             return Ok();
         }

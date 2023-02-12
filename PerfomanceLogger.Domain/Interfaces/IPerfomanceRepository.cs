@@ -2,8 +2,10 @@
 
 namespace PerfomanceLogger.Domain.Interfaces
 {
-    public interface IPerfomanceRepository
+    public interface IPerfomanceRepository : IDisposable
     {
-        Task AddOrUpdateData(List<Value> values, Result result);
+        Task AddOrUpdateDataAsync(List<Value> values, Result result);
+        Task<List<Result>> GetResultsAsync(FilterQuery filter);
+        Task<List<Value>> GetValuesByFileNameAsync(string fileName);
     }
 }
