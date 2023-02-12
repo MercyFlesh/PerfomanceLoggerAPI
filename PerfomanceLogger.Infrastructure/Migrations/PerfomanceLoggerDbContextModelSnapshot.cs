@@ -67,18 +67,18 @@ namespace PerfomanceLogger.Infrastructure.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<double>("Mark")
                         .HasColumnType("float");
-
-                    b.Property<string>("ResultFileName")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Time")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ResultFileName");
+                    b.HasIndex("FileName");
 
                     b.ToTable("Values");
                 });
@@ -87,7 +87,8 @@ namespace PerfomanceLogger.Infrastructure.Migrations
                 {
                     b.HasOne("PerfomanceLogger.Domain.Models.Result", "Result")
                         .WithMany("Values")
-                        .HasForeignKey("ResultFileName");
+                        .HasForeignKey("FileName")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Result");
                 });

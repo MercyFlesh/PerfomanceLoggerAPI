@@ -16,7 +16,7 @@ namespace PerfomanceLogger.Api.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public IActionResult UploadData(IFormFile file, [FromServices]IDocumentService documentService)
+        public async Task<IActionResult> UploadData(IFormFile file, [FromServices]IDocumentService documentService)
         {
             if (file.Length == 0)
                 return BadRequest("Received empty file");
@@ -27,7 +27,7 @@ namespace PerfomanceLogger.Api.Controllers
 
             try
             {
-                documentService.UploadCsv(file.OpenReadStream(), file.FileName.Split('.')[0]);
+                await documentService.UploadCsv(file.OpenReadStream(), file.FileName.Split('.')[0]);
                 return Ok();  
             }
             catch(Exception ex)

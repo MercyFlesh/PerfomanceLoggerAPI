@@ -14,6 +14,7 @@ namespace PerfomanceLogger.Domain.Models
         public DateTime Date { get; set; }
         public int Time { get; set; }
         public double Mark { get; set; }
+        public string? FileName { get; set; }
         public Result? Result { get; set; }
     }
 }

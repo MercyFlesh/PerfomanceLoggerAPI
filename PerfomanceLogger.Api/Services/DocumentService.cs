@@ -7,13 +7,16 @@ namespace PerfomanceLogger.Api.Services
     public class DocumentService : IDocumentService
     {
         private readonly ILogger _logger;
+        private readonly IPerfomanceRepository _perfomanceRepository;
 
-        public DocumentService(ILogger<DocumentService> logger)
+        public DocumentService(IPerfomanceRepository perfomanceRepository,
+            ILogger<DocumentService> logger)
         {
+            _perfomanceRepository = perfomanceRepository;
             _logger = logger;
         }
 
-        public async void UploadCsv(Stream stream, string fileName)
+        public async Task UploadCsv(Stream stream, string fileName)
         {
             var result = new Result();
             var records = new List<Value>();
@@ -29,7 +32,7 @@ namespace PerfomanceLogger.Api.Services
             }
 
             int countRecords = records.Count;
-            if (countRecords > 1 && countRecords < 10000)
+            if (countRecords >= 1 && countRecords <= 10000)
             {
                 result.FileName = fileName;
                 result.CountRows = countRecords;
@@ -47,6 +50,8 @@ namespace PerfomanceLogger.Api.Services
 
                 result.MinMark = recordsOrderedByMark.ElementAt(0).Mark;
                 result.MaxMark = recordsOrderedByMark.ElementAt(countRecords - 1).Mark;
+
+                await _perfomanceRepository.AddOrUpdateData(records, result);
             }
             else
             {
@@ -61,7 +66,7 @@ namespace PerfomanceLogger.Api.Services
             if (fields.Length != 3)
                 throw new ArgumentException("Incorrect count collumns in file");
 
-            if (DateTime.TryParse(fields[0], out DateTime date) &&
+            if (DateTime.TryParseExact(fields[0], "yyyy-MM-dd_HH-mm-ss", provider: null, style: 0, out DateTime date) &&
                 date >= new DateTime(2000, 01, 01) && date <= DateTime.Now)
             {
                 val.Date = date;

@@ -24,7 +24,11 @@ namespace PerfomanceLogger.Infrastructure.Context
             builder.Entity<Value>().HasKey(c => new { c.Id });
             builder.Entity<Result>().HasKey(c => new { c.FileName });
 
-            builder.Entity<Result>().HasMany(c => c.Values).WithOne(e => e.Result);
+            builder.Entity<Result>()
+                .HasMany(c => c.Values)
+                .WithOne(e => e.Result)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey(c => c.FileName);
         }
     }
 }

@@ -39,22 +39,23 @@ namespace PerfomanceLogger.Infrastructure.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Time = table.Column<int>(type: "int", nullable: false),
                     Mark = table.Column<double>(type: "float", nullable: false),
-                    ResultFileName = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    FileName = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Values", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Values_Results_ResultFileName",
-                        column: x => x.ResultFileName,
+                        name: "FK_Values_Results_FileName",
+                        column: x => x.FileName,
                         principalTable: "Results",
-                        principalColumn: "FileName");
+                        principalColumn: "FileName",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Values_ResultFileName",
+                name: "IX_Values_FileName",
                 table: "Values",
-                column: "ResultFileName");
+                column: "FileName");
         }
 
         /// <inheritdoc />

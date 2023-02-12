@@ -2,6 +2,6 @@
 {
     public interface IDocumentService
     {
-        void UploadCsv(Stream stream, string fileName);
+        Task UploadCsv(Stream stream, string fileName);
     }
 }

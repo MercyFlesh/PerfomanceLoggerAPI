@@ -13,7 +13,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IDocumentService, DocumentService>();
-
 builder.Services.AddScoped<IPerfomanceRepository, PerfomanceRepository>();
 
 var app = builder.Build();
