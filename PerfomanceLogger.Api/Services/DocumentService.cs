@@ -18,30 +18,35 @@ namespace PerfomanceLogger.Api.Services
 
         public async Task UploadCsv(Stream stream, string fileName)
         {
-            var result = new Result();
+            var result = new Result{ FileName = fileName };
             var records = new List<Value>();
             using (var streamReader = new StreamReader(stream))
             {
                 string? row;
                 for (int i = 0; (row = await streamReader.ReadLineAsync()) != null; i++)
                 {
-                    var record = ValidateData(row);
+                    var record = ValidateValueRecord(row);
                     record.Result = result;
                     records.Add(record);
                 }
             }
 
+            UpdateResultValues(records, result);
+            await _perfomanceRepository.AddOrUpdateDataAsync(records, result);
+        }
+
+        public void UpdateResultValues(List<Value> records, Result result)
+        {
             int countRecords = records.Count;
             if (countRecords >= 1 && countRecords <= 10000)
             {
-                result.FileName = fileName;
                 result.CountRows = countRecords;
                 result.MinTime = records.MinBy(x => x.Date)!.Date;
                 var maxTime = records.MaxBy(x => x.Date)!.Date;
                 result.TotalTime = maxTime - result.MinTime;
                 result.MeanExecutionTime = records.Average(x => x.Time);
                 result.MeanMark = records.Average(x => x.Mark);
-                
+
                 var recordsOrderedByMark = records.OrderBy(x => x);
                 if (countRecords % 2 == 0)
                     result.MedianMark = recordsOrderedByMark.Skip((countRecords / 2) - 1).Take(2).Average(x => x.Mark);
@@ -50,8 +55,6 @@ namespace PerfomanceLogger.Api.Services
 
                 result.MinMark = recordsOrderedByMark.ElementAt(0).Mark;
                 result.MaxMark = recordsOrderedByMark.ElementAt(countRecords - 1).Mark;
-
-                await _perfomanceRepository.AddOrUpdateDataAsync(records, result);
             }
             else
             {
@@ -59,7 +62,7 @@ namespace PerfomanceLogger.Api.Services
             }
         }
 
-        public Value ValidateData(string csvRow)
+        public Value ValidateValueRecord(string csvRow)
         {
             var val = new Value();
             string[] fields = csvRow.Split(';');
