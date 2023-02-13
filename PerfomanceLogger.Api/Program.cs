@@ -1,4 +1,5 @@
 using PerfomanceLogger.Api.Services;
+using PerfomanceLogger.Api.Middlewares;
 using PerfomanceLogger.Domain.Interfaces;
 using PerfomanceLogger.Infrastructure.Context;
 using PerfomanceLogger.Infrastructure.Repositories;
@@ -22,6 +23,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseAuthorization();
 

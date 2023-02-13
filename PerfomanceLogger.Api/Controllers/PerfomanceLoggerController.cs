@@ -24,21 +24,14 @@ namespace PerfomanceLogger.Api.Controllers
         public async Task<IActionResult> UploadData(IFormFile file, [FromServices] IDocumentService documentService)
         {
             if (file.Length == 0)
-                return BadRequest("Received empty file");
+                throw new ArgumentException("Received empty file");
 
             string format = file.FileName.Split('.')[1];
             if (format != "csv")
-                return BadRequest("Incorrect file format");
+                throw new ArgumentException("Incorrect file format");
 
-            try
-            {
-                await documentService.UploadCsv(file.OpenReadStream(), file.FileName.Split('.')[0]);
-                return Ok();  
-            }
-            catch(Exception ex)
-            {
-                return Problem(ex.Message);
-            }
+           await documentService.UploadCsv(file.OpenReadStream(), file.FileName.Split('.')[0]);
+           return Ok();
         }
 
         [HttpGet]

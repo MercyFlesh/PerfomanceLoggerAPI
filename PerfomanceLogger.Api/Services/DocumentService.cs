@@ -1,5 +1,4 @@
-﻿using System.IO;
-using PerfomanceLogger.Domain.Interfaces;
+﻿using PerfomanceLogger.Domain.Interfaces;
 using PerfomanceLogger.Domain.Models;
 
 namespace PerfomanceLogger.Api.Services
@@ -9,7 +8,8 @@ namespace PerfomanceLogger.Api.Services
         private readonly ILogger _logger;
         private readonly IPerfomanceRepository _perfomanceRepository;
 
-        public DocumentService(IPerfomanceRepository perfomanceRepository,
+        public DocumentService(
+            IPerfomanceRepository perfomanceRepository,
             ILogger<DocumentService> logger)
         {
             _perfomanceRepository = perfomanceRepository;
