@@ -21,7 +21,7 @@ namespace PerfomanceLogger.Api.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> UploadData(IFormFile file, [FromServices]IDocumentService documentService)
+        public async Task<IActionResult> UploadData(IFormFile file, [FromServices] IDocumentService documentService)
         {
             if (file.Length == 0)
                 return BadRequest("Received empty file");
@@ -43,17 +43,16 @@ namespace PerfomanceLogger.Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public IActionResult GetFilteredData([FromQuery]FilterQuery filter)
+        public async Task<IActionResult> GetResults([FromQuery] FilterQuery filter)
         {
-            Console.WriteLine(filter.FileName == null);
-            return Ok();
+            return new JsonResult(await _perfomanceRepository.GetResultsAsync(filter));
         }
 
         [HttpGet]
         [Route("[action]")]
-        public IActionResult GetFileValues(string fileName)
+        public async Task<IActionResult> GetFileValues([FromQuery] string fileName)
         {
-            return Ok();
+            return new JsonResult(await _perfomanceRepository.GetValuesByFileNameAsync(fileName));
         }
     }
 }
