@@ -185,7 +185,7 @@ namespace PerfomanceLogger.UnitTests.DocumentServiceTests
         }
 
         [Fact]
-        public async void TestUploadCsv()
+        public async void UploadCsv_NotThrowsException()
         {
             string testCsv = "2022-03-18_09-18-17;1744;1632,472\r\n" +
                 "2000-01-01_09-18-17;1744;1632\r\n" +
