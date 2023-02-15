@@ -12,7 +12,7 @@ using PerfomanceLogger.Infrastructure.Context;
 namespace PerfomanceLogger.Infrastructure.Migrations
 {
     [DbContext(typeof(PerfomanceLoggerDbContext))]
-    [Migration("20230212115532__Init")]
+    [Migration("20230215013824__Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -51,8 +51,8 @@ namespace PerfomanceLogger.Infrastructure.Migrations
                     b.Property<DateTime>("MinTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("TotalTime")
-                        .HasColumnType("time");
+                    b.Property<long>("TotalTime")
+                        .HasColumnType("bigint");
 
                     b.HasKey("FileName");
 

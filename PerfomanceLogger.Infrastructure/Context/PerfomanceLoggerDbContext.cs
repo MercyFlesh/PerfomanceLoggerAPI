@@ -29,6 +29,10 @@ namespace PerfomanceLogger.Infrastructure.Context
                 .WithOne(e => e.Result)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey(c => c.FileName);
+
+            builder.Entity<Result>()
+                .Property(r => r.TotalTime)
+                .HasConversion<long>();
         }
     }
 }

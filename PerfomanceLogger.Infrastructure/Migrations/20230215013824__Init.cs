@@ -16,7 +16,7 @@ namespace PerfomanceLogger.Infrastructure.Migrations
                 columns: table => new
                 {
                     FileName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TotalTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    TotalTime = table.Column<long>(type: "bigint", nullable: false),
                     MinTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MeanExecutionTime = table.Column<double>(type: "float", nullable: false),
                     MeanMark = table.Column<double>(type: "float", nullable: false),

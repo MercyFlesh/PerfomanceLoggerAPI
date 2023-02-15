@@ -26,9 +26,15 @@ namespace PerfomanceLogger.Infrastructure.Repositories
 
         public async Task AddOrUpdateDataAsync(List<Value> values, Result result)
         {
-            await _context.Results
+            /*await _context.Results
                 .Where(r => r.FileName == result.FileName)
-                .ExecuteDeleteAsync();
+                .ExecuteDeleteAsync();*/
+
+            if (await _context.Results.FirstOrDefaultAsync(x => x.FileName == result.FileName) is { } res)
+            {
+                _context.Results.Remove(res);
+                await _context.SaveChangesAsync();
+            }
 
             await _context.Results.AddAsync(result);
             await _context.Values.AddRangeAsync(values);

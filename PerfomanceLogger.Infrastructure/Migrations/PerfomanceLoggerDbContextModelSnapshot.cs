@@ -48,8 +48,8 @@ namespace PerfomanceLogger.Infrastructure.Migrations
                     b.Property<DateTime>("MinTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("TotalTime")
-                        .HasColumnType("time");
+                    b.Property<long>("TotalTime")
+                        .HasColumnType("bigint");
 
                     b.HasKey("FileName");
 
